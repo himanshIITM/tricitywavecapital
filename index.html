@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TriCityWaveCapital — Property, Career &amp; Financial Growth</title>
+<meta name="description" content="TriCityWaveCapital — Financial planning (Income Tax, GST, Mutual Funds, Stocks) and real estate services (plots, flats, commercial leasing) across Chandigarh, Mohali, Zirakpur and Kharar." />
+
+<!-- React + ReactDOM -->
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<!-- Babel standalone: lets the browser run the JSX below directly, no build step needed -->
+<script crossorigin src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+
+<style>
+  html, body { margin: 0; padding: 0; }
+  #root { min-height: 100vh; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useMemo } = React;
+
+const INK = "#12332B";
+const INK_DEEP = "#0C2620";
+const GOLD = "#B8934A";
+const GOLD_LIGHT = "#D4B876";
+const PAPER = "#F8F6F0";
+const SAGE = "#7C9885";
+const TEXT = "#26302B";
+const MUTED = "#69756E";
+const LINE = "#E2DECF";
+
+function formatINR(n) {
+  if (n >= 10000000) return `₹${(n / 10000000).toFixed(2)} Cr`;
+  if (n >= 100000) return `₹${(n / 100000).toFixed(2)} L`;
+  return `₹${Math.round(n).toLocaleString("en-IN")}`;
+}
+
+const SERVICES = {
+  wealth: [
+    { title: "Income Tax Return Filing", desc: "Accurate, on-time ITR filing for salaried, self-employed and business owners." },
+    { title: "GST Registration & Returns", desc: "End-to-end GST compliance so your filings never miss a deadline." },
+    { title: "Mutual Funds & SIP", desc: "Goal-based fund selection, reviewed every quarter as markets move." },
+    { title: "Stocks & Equity Advisory", desc: "Research-backed entry and exit guidance for direct equity investors." },
+  ],
+  property: [
+    { title: "Residential Plots", desc: "Verified, title-clear plots across Kharar, Zirakpur and the wider Tricity belt." },
+    { title: "Flats & Apartments", desc: "Ready-to-move and under-construction homes matched to your budget." },
+    { title: "Commercial Leasing", desc: "High-footfall retail and SCO spaces for national and regional brands." },
+    { title: "Investment Property", desc: "Rental-yield and appreciation analysis before you commit capital." },
+  ],
+};
+
+const LISTINGS = [
+  {
+    id: 1,
+    type: "Commercial",
+    title: "Aster Plaza — UGF SCO Space",
+    location: "Airport Road, PR-7, Zirakpur",
+    price: "₹2.75 Cr",
+    meta: "1,560 sq.ft · 3-year lock-in · Ready to move",
+    tag: "Leasing Opportunity",
+  },
+  {
+    id: 2,
+    type: "Plot",
+    title: "Residential Plot, Sector 127",
+    location: "Chajju Majra, Kharar — near Acme Heights",
+    price: "On request",
+    meta: "105 Gaj · Title clear property",
+    tag: "For Sale",
+  },
+  {
+    id: 3,
+    type: "Flat",
+    title: "2 BHK, Dream Land Home",
+    location: "Peer Muchalla, Dhakoli, Zirakpur",
+    price: "₹41.90 L",
+    meta: "Ground floor · Ready to move",
+    tag: "For Sale",
+  },
+];
+
+const FILTERS = ["All", "Commercial", "Plot", "Flat"];
+
+function TriCityWaveCapital() {
+  const [filter, setFilter] = useState("All");
+  const [monthly, setMonthly] = useState(10000);
+  const [years, setYears] = useState(10);
+  const [rate, setRate] = useState(12);
+  const [form, setForm] = useState({ name: "", phone: "", interest: "Investments", message: "" });
+  const [submitted, setSubmitted] = useState(false);
+
+  const filteredListings = filter === "All" ? LISTINGS : LISTINGS.filter((l) => l.type === filter);
+
+  const { invested, maturity, gains } = useMemo(() => {
+    const i = rate / 100 / 12;
+    const n = years * 12;
+    const fv = monthly * ((Math.pow(1 + i, n) - 1) / i) * (1 + i);
+    const inv = monthly * n;
+    return { invested: inv, maturity: fv, gains: Math.max(0, fv - inv) };
+  }, [monthly, years, rate]);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    setSubmitted(true);
+  }
+
+  return (
+    <div style={s.page}>
+      <style>{GLOBAL_CSS}</style>
+
+      {/* NAV */}
+      <nav style={s.nav}>
+        <div style={s.navInner}>
+          <div style={s.brand}>
+            <span style={s.brandMark}>TW</span>
+            <span style={s.brandWord}>TriCityWaveCapital</span>
+          </div>
+          <div className="nav-links">
+            <a href="#services" className="nav-link">Services</a>
+            <a href="#listings" className="nav-link">Properties</a>
+            <a href="#calculator" className="nav-link">Calculator</a>
+            <a href="#contact" className="nav-link">Contact</a>
+          </div>
+          <a href="tel:+919814739769" className="btn-gold-small">+91 98147 39769</a>
+        </div>
+      </nav>
+
+      {/* HERO */}
+      <header style={s.hero}>
+        <div style={s.heroInner}>
+          <div style={s.heroGoldLine} className="hero-in" data-delay="0" />
+          <p style={s.heroEyebrow} className="hero-in" data-delay="1">Chandigarh · Mohali · Zirakpur · Kharar</p>
+          <h1 style={s.heroHeadline} className="hero-in" data-delay="2">
+            Property, career and financial<br />growth — under one roof.
+          </h1>
+          <p style={s.heroSub} className="hero-in" data-delay="3">
+            Harmandeep Singh and the TriCityWaveCapital team help Tricity families and
+            businesses file taxes correctly, invest with a plan, and buy or lease property
+            with confidence — one advisor, every decision.
+          </p>
+          <div style={s.heroActions} className="hero-in" data-delay="4">
+            <a href="#contact" className="btn-gold">Book a Free Consultation</a>
+            <a href="#listings" className="btn-ghost">View Properties</a>
+          </div>
+        </div>
+        <div className="grid-4" style={s.heroStats}>
+          {[
+            ["8+", "Active listings & mandates"],
+            ["₹2.75 Cr+", "Commercial deal value listed"],
+            ["2", "Verticals — Wealth & Property"],
+            ["100%", "Title-verified properties"],
+          ].map(([n, l], idx) => (
+            <div key={l} style={s.statItem} className={`hero-in stat-item`} data-delay={5 + idx}>
+              <div style={s.statNum}>{n}</div>
+              <div style={s.statLabel}>{l}</div>
+            </div>
+          ))}
+        </div>
+      </header>
+
+      {/* SERVICES */}
+      <section id="services" style={s.section}>
+        <div style={s.sectionHead}>
+          <p style={s.kicker}>What we do</p>
+          <h2 style={s.sectionTitle}>Two practices. One point of contact.</h2>
+        </div>
+
+        <div className="grid-2" style={s.pillarRow}>
+          <div className="pillar-card" style={s.pillarCard}>
+            <h3 style={s.pillarTitle}>Wealth &amp; Tax</h3>
+            <p style={s.pillarSub}>Income Tax · GST · Mutual Funds · Stocks · Investment Planning</p>
+            <div style={s.pillarList}>
+              {SERVICES.wealth.map((it) => (
+                <div key={it.title} style={s.pillarItem}>
+                  <div style={s.pillarItemTitle}>{it.title}</div>
+                  <div style={s.pillarItemDesc}>{it.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="pillar-card" style={{ ...s.pillarCard, background: INK, color: PAPER }}>
+            <h3 style={{ ...s.pillarTitle, color: PAPER }}>Property</h3>
+            <p style={{ ...s.pillarSub, color: "#B9C4BC" }}>Plots · Flats · Commercial Leasing · Investment Property</p>
+            <div style={s.pillarList}>
+              {SERVICES.property.map((it) => (
+                <div key={it.title} style={{ ...s.pillarItem, borderColor: "rgba(248,246,240,0.14)" }}>
+                  <div style={{ ...s.pillarItemTitle, color: PAPER }}>{it.title}</div>
+                  <div style={{ ...s.pillarItemDesc, color: "#AAB6AD" }}>{it.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* LISTINGS */}
+      <section id="listings" style={{ ...s.section, background: "#F1EEE4" }}>
+        <div style={s.sectionHead}>
+          <p style={s.kicker}>Featured</p>
+          <h2 style={s.sectionTitle}>Current property mandates</h2>
+        </div>
+
+        <div style={s.filterRow}>
+          {FILTERS.map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className={filter === f ? "filter-btn filter-btn-active" : "filter-btn"}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
+
+        <div style={s.listingGrid}>
+          {filteredListings.map((l) => (
+            <div key={l.id} className="listing-card" style={s.listingCard}>
+              <div style={s.listingTop}>
+                <span style={s.listingTag}>{l.tag}</span>
+                <span style={s.listingType}>{l.type}</span>
+              </div>
+              <h3 style={s.listingTitle}>{l.title}</h3>
+              <p style={s.listingLocation}>{l.location}</p>
+              <p style={s.listingMeta}>{l.meta}</p>
+              <div style={s.listingFooter}>
+                <span style={s.listingPrice}>{l.price}</span>
+                <a href="#contact" style={s.listingLink}>Enquire →</a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CALCULATOR */}
+      <section id="calculator" style={s.section}>
+        <div style={s.sectionHead}>
+          <p style={s.kicker}>Plan ahead</p>
+          <h2 style={s.sectionTitle}>See what your SIP could grow into</h2>
+        </div>
+
+        <div className="grid-2-uneven" style={s.calcWrap}>
+          <div style={s.calcControls}>
+            <div style={s.sliderBlock}>
+              <div style={s.sliderLabelRow}>
+                <span style={s.sliderLabel}>Monthly investment</span>
+                <span style={s.sliderValue}>{formatINR(monthly)}</span>
+              </div>
+              <input
+                type="range" min="1000" max="100000" step="500"
+                value={monthly} onChange={(e) => setMonthly(Number(e.target.value))}
+                style={s.slider}
+              />
+            </div>
+            <div style={s.sliderBlock}>
+              <div style={s.sliderLabelRow}>
+                <span style={s.sliderLabel}>Investment period</span>
+                <span style={s.sliderValue}>{years} years</span>
+              </div>
+              <input
+                type="range" min="1" max="30" step="1"
+                value={years} onChange={(e) => setYears(Number(e.target.value))}
+                style={s.slider}
+              />
+            </div>
+            <div style={s.sliderBlock}>
+              <div style={s.sliderLabelRow}>
+                <span style={s.sliderLabel}>Expected annual return</span>
+                <span style={s.sliderValue}>{rate}%</span>
+              </div>
+              <input
+                type="range" min="6" max="18" step="0.5"
+                value={rate} onChange={(e) => setRate(Number(e.target.value))}
+                style={s.slider}
+              />
+            </div>
+            <p style={s.calcNote}>
+              Illustrative only, assuming steady monthly compounding — actual returns vary with market conditions.
+            </p>
+          </div>
+
+          <div style={s.calcResult}>
+            <div style={s.pieWrap}>
+              <DonutChart invested={invested} gains={gains} />
+              <div style={s.pieCenter}>
+                <div style={s.pieCenterLabel}>Maturity value</div>
+                <div key={Math.round(maturity)} style={s.pieCenterValue} className="value-pop">{formatINR(maturity)}</div>
+              </div>
+            </div>
+            <div style={s.calcLegend}>
+              <div style={s.legendRow}>
+                <span style={{ ...s.legendDot, background: SAGE }} />
+                <span style={s.legendText}>Invested — {formatINR(invested)}</span>
+              </div>
+              <div style={s.legendRow}>
+                <span style={{ ...s.legendDot, background: GOLD }} />
+                <span style={s.legendText}>Wealth gained — {formatINR(gains)}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* TRUST */}
+      <section style={{ ...s.section, background: INK, color: PAPER }}>
+        <div className="grid-3" style={s.trustGrid}>
+          {[
+            ["Local expertise", "Every listing walked and verified across the Tricity belt — not just sourced from a portal."],
+            ["One advisor, two disciplines", "Your tax filing and your property search stay with the same person who knows your full picture."],
+            ["No jargon", "Plain explanations for GST notices, SIP statements and sale deeds — decisions you can actually stand behind."],
+          ].map(([t, d]) => (
+            <div key={t} style={s.trustItem}>
+              <div style={s.trustRule} />
+              <h4 style={s.trustTitle}>{t}</h4>
+              <p style={s.trustDesc}>{d}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CONTACT */}
+      <section id="contact" style={s.section}>
+        <div className="grid-2" style={s.contactGrid}>
+          <div>
+            <p style={s.kicker}>Get in touch</p>
+            <h2 style={s.sectionTitle}>Tell us what you're planning for</h2>
+            <p style={{ ...s.pillarSub, marginTop: 12, maxWidth: 380 }}>
+              Whether it's a tax deadline, a first SIP, or a property to view this weekend —
+              share a few details and we'll call you back.
+            </p>
+
+            <div style={s.contactInfo}>
+              <div style={s.contactRow}><span style={s.contactLabel}>Phone</span><span>+91 98147 39769</span></div>
+              <div style={s.contactRow}><span style={s.contactLabel}>Alt.</span><span>+91 89680 81569</span></div>
+              <div style={s.contactRow}><span style={s.contactLabel}>Office</span><span>3207/1, Sector 47-D, Chandigarh 160047</span></div>
+            </div>
+          </div>
+
+          <div style={s.formCard}>
+            {submitted ? (
+              <div style={s.successBox} className="value-pop">
+                <div style={s.successTitle}>Request received</div>
+                <p style={s.successText}>We'll call you back shortly on the number you shared.</p>
+                <button className="btn-ghost-small" onClick={() => setSubmitted(false)}>Send another</button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} style={s.form}>
+                <label style={s.formLabel}>Name</label>
+                <input
+                  required className="form-input" value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  placeholder="Your full name"
+                />
+                <label style={s.formLabel}>Phone</label>
+                <input
+                  required className="form-input" value={form.phone}
+                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                  placeholder="10-digit mobile number"
+                />
+                <label style={s.formLabel}>I'm interested in</label>
+                <select
+                  className="form-input" value={form.interest}
+                  onChange={(e) => setForm({ ...form, interest: e.target.value })}
+                >
+                  <option>Investments</option>
+                  <option>Tax / GST filing</option>
+                  <option>Buying property</option>
+                  <option>Leasing / Selling property</option>
+                </select>
+                <label style={s.formLabel}>Message (optional)</label>
+                <textarea
+                  className="form-input" style={{ resize: "vertical" }} rows={3} value={form.message}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  placeholder="Tell us a bit more…"
+                />
+                <button type="submit" className="btn-gold" style={{ marginTop: 8 }}>Request a callback</button>
+              </form>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer style={s.footer}>
+        <span>TriCityWaveCapital — Harmandeep Singh, Financial Planner</span>
+        <span style={s.footerDot}>·</span>
+        <span>Sector 47-D, Chandigarh</span>
+      </footer>
+
+      {/* WHATSAPP FLOAT */}
+      <a
+        href="https://wa.me/919814739769"
+        target="_blank"
+        rel="noreferrer"
+        className="whatsapp-float"
+        aria-label="Chat on WhatsApp"
+      >
+        <span className="whatsapp-ring" />
+        <WhatsAppIcon />
+      </a>
+    </div>
+  );
+}
+
+function DonutChart({ invested, gains }) {
+  const total = invested + gains || 1;
+  const r = 80;
+  const strokeWidth = 24;
+  const circumference = 2 * Math.PI * r;
+  const investedLen = (invested / total) * circumference;
+  const gainsLen = (gains / total) * circumference;
+
+  return (
+    <svg viewBox="0 0 200 200" width="100%" height="200" role="img" aria-label="Invested vs wealth gained">
+      <circle cx="100" cy="100" r={r} fill="none" stroke={LINE} strokeWidth={strokeWidth} />
+      <circle
+        cx="100" cy="100" r={r} fill="none" stroke={SAGE} strokeWidth={strokeWidth}
+        strokeDasharray={`${investedLen} ${circumference - investedLen}`}
+        strokeDashoffset={0}
+        transform="rotate(-90 100 100)"
+        strokeLinecap="butt"
+        style={{ transition: "stroke-dasharray 0.5s ease" }}
+      />
+      <circle
+        cx="100" cy="100" r={r} fill="none" stroke={GOLD} strokeWidth={strokeWidth}
+        strokeDasharray={`${gainsLen} ${circumference - gainsLen}`}
+        strokeDashoffset={-investedLen}
+        transform="rotate(-90 100 100)"
+        strokeLinecap="butt"
+        style={{ transition: "stroke-dasharray 0.5s ease, stroke-dashoffset 0.5s ease" }}
+      />
+    </svg>
+  );
+}
+
+function WhatsAppIcon() {
+  return (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="white">
+      <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.44 1.32 4.94L2 22l5.29-1.39a9.87 9.87 0 0 0 4.75 1.21h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.83 9.83 0 0 0 12.04 2zm0 18.14h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.14.82.84-3.06-.2-.31a8.2 8.2 0 0 1-1.26-4.35c0-4.54 3.7-8.24 8.26-8.24 2.21 0 4.28.86 5.84 2.42a8.18 8.18 0 0 1 2.42 5.83c0 4.55-3.71 8.24-8.26 8.24zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.53.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43-.14-.01-.31-.01-.48-.01-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.08 0 1.23.89 2.42 1.02 2.58.12.17 1.75 2.67 4.24 3.74.59.26 1.06.41 1.42.52.6.19 1.14.16 1.57.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.23-.16-.48-.29z"/>
+    </svg>
+  );
+}
+
+const s = {
+  page: { fontFamily: "'Manrope', sans-serif", color: TEXT, background: PAPER, overflowX: "hidden" },
+
+  nav: { position: "sticky", top: 0, zIndex: 40, background: "rgba(248,246,240,0.92)", backdropFilter: "blur(8px)", borderBottom: `1px solid ${LINE}` },
+  navInner: { maxWidth: 1160, margin: "0 auto", padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" },
+  brand: { display: "flex", alignItems: "center", gap: 10 },
+  brandMark: { width: 34, height: 34, borderRadius: "50%", background: INK, color: GOLD_LIGHT, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Newsreader', serif", fontSize: 14, fontWeight: 600, flexShrink: 0 },
+  brandWord: { fontFamily: "'Newsreader', serif", fontSize: 18, fontWeight: 600, letterSpacing: "-0.01em", whiteSpace: "nowrap" },
+
+  hero: { background: `linear-gradient(180deg, ${INK_DEEP}, ${INK})`, color: PAPER, padding: "76px 28px 0" },
+  heroInner: { maxWidth: 720, margin: "0 auto", textAlign: "left" },
+  heroGoldLine: { width: 44, height: 3, background: GOLD, marginBottom: 22, borderRadius: 2 },
+  heroEyebrow: { fontSize: 13, color: "#B9C4BC", marginBottom: 14, letterSpacing: "0.02em" },
+  heroHeadline: { fontFamily: "'Newsreader', serif", fontSize: "clamp(30px, 5vw, 50px)", fontWeight: 600, lineHeight: 1.12, letterSpacing: "-0.01em", margin: "0 0 20px" },
+  heroSub: { fontSize: 16.5, lineHeight: 1.65, color: "#C7D0C9", maxWidth: 560, marginBottom: 34 },
+  heroActions: { display: "flex", gap: 14, marginBottom: 64, flexWrap: "wrap" },
+  heroStats: { maxWidth: 1160, margin: "0 auto", borderTop: "1px solid rgba(248,246,240,0.14)" },
+  statItem: { padding: "26px 20px" },
+  statNum: { fontFamily: "'Newsreader', serif", fontSize: 26, color: GOLD_LIGHT, fontWeight: 600 },
+  statLabel: { fontSize: 12.5, color: "#AAB6AD", marginTop: 4 },
+
+  section: { maxWidth: 1160, margin: "0 auto", padding: "76px 28px" },
+  sectionHead: { marginBottom: 40, maxWidth: 560 },
+  kicker: { fontSize: 12.5, color: GOLD, fontWeight: 700, marginBottom: 8 },
+  sectionTitle: { fontFamily: "'Newsreader', serif", fontSize: "clamp(24px, 3.4vw, 34px)", fontWeight: 600, lineHeight: 1.2, letterSpacing: "-0.01em" },
+
+  pillarRow: { gap: 24 },
+  pillarCard: { background: "#fff", border: `1px solid ${LINE}`, borderRadius: 4, padding: "34px 32px" },
+  pillarTitle: { fontFamily: "'Newsreader', serif", fontSize: 24, fontWeight: 600, marginBottom: 6 },
+  pillarSub: { fontSize: 14, color: MUTED },
+  pillarList: { marginTop: 24, display: "flex", flexDirection: "column" },
+  pillarItem: { padding: "16px 0", borderTop: `1px solid ${LINE}` },
+  pillarItemTitle: { fontSize: 15, fontWeight: 700, marginBottom: 4 },
+  pillarItemDesc: { fontSize: 13.5, color: MUTED, lineHeight: 1.5 },
+
+  filterRow: { display: "flex", gap: 10, marginBottom: 28, flexWrap: "wrap" },
+  listingGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 22 },
+  listingCard: { background: "#fff", border: `1px solid ${LINE}`, borderRadius: 4, padding: 26, display: "flex", flexDirection: "column" },
+  listingTop: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 },
+  listingTag: { fontSize: 11, fontWeight: 700, color: GOLD, textTransform: "uppercase", letterSpacing: "0.04em" },
+  listingType: { fontSize: 11, color: MUTED, border: `1px solid ${LINE}`, borderRadius: 12, padding: "2px 10px" },
+  listingTitle: { fontFamily: "'Newsreader', serif", fontSize: 19, fontWeight: 600, marginBottom: 6 },
+  listingLocation: { fontSize: 13.5, color: MUTED, marginBottom: 4 },
+  listingMeta: { fontSize: 12.5, color: SAGE, marginBottom: 20 },
+  listingFooter: { marginTop: "auto", display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: 16, borderTop: `1px solid ${LINE}` },
+  listingPrice: { fontFamily: "'Newsreader', serif", fontSize: 18, fontWeight: 600, color: INK },
+  listingLink: { fontSize: 13.5, color: INK, fontWeight: 700, textDecoration: "none" },
+
+  calcWrap: { gap: 40, background: "#fff", border: `1px solid ${LINE}`, borderRadius: 4, padding: "40px 36px", alignItems: "center" },
+  calcControls: { display: "flex", flexDirection: "column", gap: 26 },
+  sliderBlock: { display: "flex", flexDirection: "column", gap: 10 },
+  sliderLabelRow: { display: "flex", justifyContent: "space-between", fontSize: 13.5 },
+  sliderLabel: { color: MUTED },
+  sliderValue: { fontWeight: 700, color: INK },
+  slider: { width: "100%", accentColor: GOLD },
+  calcNote: { fontSize: 12, color: MUTED, marginTop: 4, lineHeight: 1.5 },
+  calcResult: { display: "flex", flexDirection: "column", alignItems: "center", gap: 20 },
+  pieWrap: { position: "relative", width: "100%", maxWidth: 220 },
+  pieCenter: { position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", textAlign: "center" },
+  pieCenterLabel: { fontSize: 11, color: MUTED, marginBottom: 4 },
+  pieCenterValue: { fontFamily: "'Newsreader', serif", fontSize: 19, fontWeight: 700, color: INK },
+  calcLegend: { display: "flex", flexDirection: "column", gap: 8, width: "100%" },
+  legendRow: { display: "flex", alignItems: "center", gap: 8 },
+  legendDot: { width: 10, height: 10, borderRadius: "50%", display: "inline-block" },
+  legendText: { fontSize: 13.5, color: TEXT },
+
+  trustGrid: { maxWidth: 1160, margin: "0 auto", gap: 36 },
+  trustItem: { display: "flex", flexDirection: "column" },
+  trustRule: { width: 30, height: 2, background: GOLD, marginBottom: 16 },
+  trustTitle: { fontFamily: "'Newsreader', serif", fontSize: 19, fontWeight: 600, marginBottom: 10 },
+  trustDesc: { fontSize: 14, lineHeight: 1.6, color: "#B9C4BC" },
+
+  contactGrid: { gap: 48 },
+  contactInfo: { marginTop: 32, display: "flex", flexDirection: "column", gap: 10 },
+  contactRow: { display: "flex", gap: 12, fontSize: 14 },
+  contactLabel: { color: MUTED, width: 60, flexShrink: 0 },
+  formCard: { background: "#fff", border: `1px solid ${LINE}`, borderRadius: 4, padding: 32 },
+  form: { display: "flex", flexDirection: "column", gap: 6 },
+  formLabel: { fontSize: 12.5, color: MUTED, marginTop: 12, marginBottom: 4 },
+  successBox: { textAlign: "center", padding: "24px 8px" },
+  successTitle: { fontFamily: "'Newsreader', serif", fontSize: 20, fontWeight: 600, marginBottom: 8, color: INK },
+  successText: { fontSize: 13.5, color: MUTED, marginBottom: 18 },
+
+  footer: { textAlign: "center", padding: "28px 20px 100px", fontSize: 12.5, color: MUTED, borderTop: `1px solid ${LINE}` },
+  footerDot: { margin: "0 8px" },
+};
+
+const GLOBAL_CSS = `
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,500;0,600;0,700;1,500&family=Manrope:wght@400;500;600;700&display=swap');
+
+* { box-sizing: border-box; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* ---- layout grids (kept out of inline styles so media queries can win) ---- */
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; }
+.grid-2-uneven { display: grid; grid-template-columns: 1.1fr 0.9fr; }
+
+@media (max-width: 860px) {
+  .grid-2, .grid-2-uneven, .grid-3 { grid-template-columns: 1fr; }
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .nav-links { display: none; }
+}
+@media (max-width: 480px) {
+  .grid-4 { grid-template-columns: 1fr; }
+  .btn-gold-small { font-size: 12px; padding: 8px 12px; }
+  .stat-item { border-bottom: 1px solid rgba(248,246,240,0.1); border-right: none !important; }
+  .stat-item:last-child { border-bottom: none; }
+}
+.stat-item { border-right: 1px solid rgba(248,246,240,0.1); }
+.grid-4 > .stat-item:nth-child(4n) { border-right: none; }
+@media (max-width: 860px) and (min-width: 481px) {
+  .grid-4 > .stat-item:nth-child(2n) { border-right: none; }
+}
+
+/* ---- nav ---- */
+.nav-links { display: flex; gap: 28px; }
+.nav-link { color: ${TEXT}; text-decoration: none; font-size: 14px; position: relative; padding-bottom: 2px; }
+.nav-link::after { content: ""; position: absolute; left: 0; right: 100%; bottom: 0; height: 1px; background: ${GOLD}; transition: right 0.25s ease; }
+.nav-link:hover::after { right: 0; }
+
+/* ---- buttons ---- */
+.btn-gold, .btn-gold-small {
+  background: linear-gradient(135deg, ${GOLD_LIGHT}, ${GOLD});
+  color: ${INK_DEEP}; padding: 13px 26px; border-radius: 30px; text-decoration: none;
+  font-weight: 700; font-size: 14.5px; border: none; cursor: pointer; display: inline-block;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-gold-small { padding: 9px 16px; font-size: 13px; }
+.btn-gold:hover, .btn-gold-small:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(184,147,74,0.35); }
+.btn-ghost {
+  background: transparent; color: ${PAPER}; padding: 13px 26px; border-radius: 30px; text-decoration: none;
+  font-weight: 600; font-size: 14.5px; border: 1px solid rgba(248,246,240,0.35); display: inline-block;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.btn-ghost:hover { background: rgba(248,246,240,0.08); transform: translateY(-2px); }
+.btn-ghost-small {
+  background: transparent; color: ${INK}; padding: 9px 16px; border-radius: 20px; font-weight: 600;
+  font-size: 13px; border: 1px solid ${LINE}; cursor: pointer; transition: background 0.2s ease;
+}
+.btn-ghost-small:hover { background: ${PAPER}; }
+
+/* ---- filter pills ---- */
+.filter-btn {
+  background: transparent; border: 1px solid ${LINE}; border-radius: 20px; padding: 8px 18px;
+  font-size: 13.5px; cursor: pointer; color: ${TEXT}; font-family: inherit;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.filter-btn:hover { border-color: ${GOLD}; }
+.filter-btn-active { background: ${INK}; border-color: ${INK}; color: ${PAPER}; font-weight: 700; }
+.filter-btn-active:hover { border-color: ${INK}; }
+
+/* ---- cards ---- */
+.pillar-card, .listing-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.pillar-card:hover, .listing-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(18,51,43,0.12);
+}
+
+/* ---- form inputs ---- */
+.form-input {
+  border: 1px solid ${LINE}; border-radius: 4px; padding: 11px 12px; font-size: 14px;
+  font-family: inherit; color: ${TEXT}; background: ${PAPER}; width: 100%;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.form-input:focus { outline: none; border-color: ${GOLD}; box-shadow: 0 0 0 3px rgba(184,147,74,0.15); }
+
+/* ---- hero entrance (one orchestrated sequence, plays once on load) ---- */
+.hero-in { opacity: 0; transform: translateY(16px); animation: heroIn 0.7s ease forwards; }
+.hero-in[data-delay="0"] { animation-delay: 0.05s; }
+.hero-in[data-delay="1"] { animation-delay: 0.15s; }
+.hero-in[data-delay="2"] { animation-delay: 0.25s; }
+.hero-in[data-delay="3"] { animation-delay: 0.38s; }
+.hero-in[data-delay="4"] { animation-delay: 0.5s; }
+.hero-in[data-delay="5"] { animation-delay: 0.6s; }
+.hero-in[data-delay="6"] { animation-delay: 0.66s; }
+.hero-in[data-delay="7"] { animation-delay: 0.72s; }
+.hero-in[data-delay="8"] { animation-delay: 0.78s; }
+@keyframes heroIn { to { opacity: 1; transform: translateY(0); } }
+
+/* ---- value pop, used when a computed number/state changes ---- */
+.value-pop { animation: valuePop 0.4s ease; }
+@keyframes valuePop { 0% { opacity: 0.4; transform: scale(0.96); } 100% { opacity: 1; transform: scale(1); } }
+
+/* ---- whatsapp float ---- */
+.whatsapp-float {
+  position: fixed; bottom: 22px; right: 22px; width: 56px; height: 56px; border-radius: 50%;
+  background: #25D366; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25); z-index: 50; transition: transform 0.2s ease;
+}
+.whatsapp-float:hover { transform: scale(1.08); }
+.whatsapp-ring {
+  position: absolute; inset: 0; border-radius: 50%; border: 2px solid #25D366;
+  animation: ringPulse 2.4s ease-out infinite;
+}
+@keyframes ringPulse {
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+`;
+
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<TriCityWaveCapital />);
+</script>
+
+</body>
+</html>
